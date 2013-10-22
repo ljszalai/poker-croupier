@@ -18,5 +18,5 @@ compile_module 'player/rb', 'rb', 'player_strategy'
 compile_module 'player/rb', 'rb', 'types'
 compile_module 'logging_spectator', 'rb', 'spectator'
 compile_module 'logging_spectator', 'rb', 'types'
-
-
+compile_module 'json_spectator', 'rb', 'spectator'
+compile_module 'json_spectator', 'rb', 'types'
