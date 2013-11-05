@@ -17,17 +17,33 @@ module Ranking
 
     def initialize(*cards)
       @cards = []
-      cards.each do |card_name|
-        @cards << Card.new(card_name)
+      cards.each do |card|
+        if card.is_a? Card
+          @cards << card
+        elsif card.is_a? String
+          @cards << Card.new(card)
+        else
+          raise "Hand initializer expects a card or a card name"
+        end
       end
-      @cards.sort_by! { |card| card.value }
 
-      calculate_rank
+      if @cards.length > 0
+        @cards.sort_by! { |card| card.value }
 
+        calculate_rank
+      end
     end
 
 
     def defeats?(other_hand)
+      if @cards.length == 0
+        return false
+      end
+
+      if other_hand.cards.length == 0
+        return true
+      end
+
       return self.rank > other_hand.rank unless self.rank == other_hand.rank
       return self.value > other_hand.value unless self.value == other_hand.value
       return self.second_value > other_hand.second_value unless self.second_value == other_hand.second_value

@@ -5,6 +5,8 @@ class Croupier::GameState
   attr_reader :big_blind
   attr_reader :pot
 
+  attr_accessor :community_cards
+
   def initialize
     @players = []
     @spectators = []
@@ -13,6 +15,7 @@ class Croupier::GameState
     @pot = 0
     @current_player = 0
     @player_on_first_position = 0
+    @community_cards = []
   end
 
   def register_player(player)
@@ -27,7 +30,7 @@ class Croupier::GameState
     @deck ||= Croupier::Deck.new
   end
 
-  def each_player_and_spectator
+  def each_observer
     (@players + @spectators).each do |observer|
       yield observer
     end
@@ -39,9 +42,15 @@ class Croupier::GameState
     end
   end
 
+  def each_player
+    @players.each do |observer|
+      yield observer
+    end
+  end
+
   def transfer_bet(player, amount, bet_type)
     transfer player, amount
-    each_player_and_spectator do |observer|
+    each_observer do |observer|
       observer.bet player, amount: amount, type: bet_type
     end
   end
@@ -54,10 +63,8 @@ class Croupier::GameState
     @players[1]
   end
 
-  private
-
   def transfer(player, amount)
-    player.withdraw amount
+    player.stack -= amount
     @pot += amount
   end
 end

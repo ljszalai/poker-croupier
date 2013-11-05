@@ -21,6 +21,10 @@ class PlayerStrategy::Handler
   end
 
   def bet_request
-    rand(0..30)
+    10 * rand(0..2)
+  end
+
+  def winner(competitor)
+    p competitor
   end
 end
